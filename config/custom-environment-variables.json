@@ -1,0 +1,7 @@
+{
+  "dsn": "DSN",
+  "listen": {
+    "port": "LISTEN_PORT",
+    "host": "LISTEN_HOST"
+  }
+}
