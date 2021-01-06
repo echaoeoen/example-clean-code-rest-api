@@ -6,6 +6,9 @@ import bodyParser from 'body-parser'
 import middlewareLogger from './middlewares/middleware-logger'
 import middlwareSimpleAuth from './middlewares/simple-auth'
 import fileUpload from 'express-fileupload'
+import swaggerUi from 'swagger-ui-express'
+
+const swaggerDocs = require('./docs/swagger.json')
 
 const path = {
   persons: `/persons`,
@@ -25,9 +28,12 @@ export const Router = function(m: Manager, c: ConfigProvider) {
       logType: 'full'
     }))
   
-  router.use(
-    middlwareSimpleAuth()
-  )
+  // router.use(
+  //   middlwareSimpleAuth()
+  // )
+  // serving  OAS docs 
+  router.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+  
   router.get(path.persons, personController.fetch)
 
   router.get(path.idPersons, personController.get)
@@ -38,6 +44,6 @@ export const Router = function(m: Manager, c: ConfigProvider) {
   router.patch(path.imagePersons, fileUpload(),  personController.uploadImage)
   router.get(path.imagePersons, personController.getImage)
 
-  router.get('/', (req, res) => res.send(`welcome to my app`))
+  router.get('/', (req, res) => res.send(`welcome to my app, go to <a href='/docs'>docs</a> `))
   return router
 }
